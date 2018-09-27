@@ -1,0 +1,124 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<!-- 日期控件 -->
+<link th:href="@{/ajax/libs/datapicker/datepicker3.css}" rel="stylesheet"/>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-bills-add">
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">标题：</label>
+				<div class="col-sm-8">
+					<input id="title" name="title" class="form-control" type="text" placeholder="存在所属项目可以不填标题">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">项目：</label>
+				<div class="col-sm-8">
+					<input id="projectId" name="projectId" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+                <label class="col-sm-3 control-label">票据类型：</label>
+                <div class="col-sm-8">
+                    <select name="typeId" class="form-control m-b" th:with="type=${billTypesList}">
+                    	<option></option>
+	                    <option th:each="dict : ${type}" th:text="${dict.name}" th:value="${dict.id}"></option>
+	                </select>
+                </div>
+            </div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">类型：</label>
+				<div class="col-sm-8">
+					<select name="type" class="form-control m-b" th:with="t=${@dict.getType('billClassify')}">
+	                    <option th:each="dict : ${t}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+	                </select>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">编号：</label>
+				<div class="col-sm-8">
+					<input id="billNum" name="billNum" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">票号：</label>
+				<div class="col-sm-8">
+					<input id="billNum2" name="billNum2" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">票据金额：</label>
+				<div class="col-sm-8">
+					<input id="amount" name="amount" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">开票单位：</label>
+				<div class="col-sm-8">
+					<input id="company" name="company" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">取票人：</label>
+				<div class="col-sm-8">
+					<input id="receiver" name="receiver" class="form-control" type="text">
+				</div>
+			</div>
+		    <div class="form-group">
+		        <label class="col-sm-3 control-label">创建时间：</label>
+		        <div class="col-sm-8">
+	                <div class="input-group date">
+						<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+	                    <input name="createTime" type="text" class="form-control" value="">
+	                </div>
+		        </div>
+		    </div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">开票人：</label>
+				<div class="col-sm-8">
+					<input id="drawerName" class="form-control" type="text" onclick="selectUser();" readonly="readonly">
+					<input id="drawerId" name="drawerId" class="form-control" type="text" style="display:none">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">备注：</label>
+				<div class="col-sm-8">
+					<textarea id="remark" name="remark" class="form-control"></textarea>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="form-control-static col-sm-offset-9">
+					<button type="submit" class="btn btn-primary">提交</button>
+					<button onclick="$.modal.close()" class="btn btn-danger" type="button">关闭</button>
+				</div>
+			</div>
+		</form>
+	</div>
+    <div th:include="include::footer"></div>
+    <!-- 日期控件 -->
+   	<script th:src="@{/ajax/libs//datapicker/bootstrap-datepicker.js}"></script>
+    <script>
+       $(".input-group.date").datepicker({todayBtn: "linked",keyboardNavigation: !1,forceParse: !1,calendarWeeks: !0,autoclose: !0});
+   	</script>
+    <script type="text/javascript">
+		var prefix = ctx + "module/bills";
+		$("#form-bills-add").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			},
+			submitHandler: function(form) {
+				$.operate.save(prefix + "/add", $('#form-bills-add').serialize());
+			}
+		});
+		//人员选择
+		function selectUser(){
+			var url = ctx + 'system/user' + '/view?selectUserName=drawerName&selectUserId=drawerId';
+		    $.modal.open("人员选择", url);
+		}
+	</script>
+</body>
+</html>

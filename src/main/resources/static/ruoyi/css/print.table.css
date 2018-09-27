@@ -1,0 +1,33 @@
+#divT {
+	width: 700px;
+	margin: 0px auto;
+}
+
+
+#divT table{
+    width: 100%;
+    border-collapse: collapse;
+}
+
+
+#divT td,#divT th{
+    padding: 0;
+}
+
+/*table的完整td*/
+#fineTable td,#fineTable th,.fineTable td,.fineTable th{
+    font-size:13px;
+    height: 25px;
+    line-height: 25px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border: 1px solid #99BBE8;
+}
+/*表格标签样式*/
+#fineTable .label-td,.fineTable .label-td{
+    text-align: center;
+    font-weight: bold;
+}
+.fineTable .label-backgroud{
+    background-color: #d0def0;
+}

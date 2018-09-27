@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-financeItems-view" th:object="${financeItems}">
+            <input id="id" name="id" th:field="*{id}"  type="hidden">
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">名称：</label>
+                <div class="col-sm-8">
+                    <input id="name" name="name" th:field="*{name}" class="form-control" type="text" readonly="readonly">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">科目类型：</label>
+                <div class="col-sm-8">
+                    <select name="type" class="form-control m-b" th:with="type=${@dict.getType('financeType')}" disabled="false">
+	                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{type}"></option>
+	                </select>
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">子类别：</label>
+                <div class="col-sm-8">
+                    <select name="itemTypeId" class="form-control m-b" th:with="type=${itemTypeList}" disabled="false">
+                    	<option></option>
+	                    <option th:each="dict : ${type}" th:text="${dict.name}" th:value="${dict.id}" th:field="*{itemTypeId}"></option>
+	                </select>
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">描述：</label>
+                <div class="col-sm-8">
+                	<textarea id="descn" name="descn" class="form-control" readonly="readonly">[[*{descn}]]</textarea>
+                </div>
+            </div>
+			<div class="form-group">
+				<div class="form-control-static col-sm-offset-9">
+					<button onclick="$.modal.close()" class="btn btn-danger" type="button">关闭</button>
+				</div>
+			</div>
+		</form>
+    </div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "module/financeItems"
+		$("#form-financeItems-view").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			},
+		});
+	</script>
+</body>
+</html>

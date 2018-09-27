@@ -1,0 +1,121 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+	<div th:fragment="header">
+		<link th:href="@{/ruoyi/css/view.table.css}" rel="stylesheet"/>
+	</div>
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-bills-view" th:object="${bills}">
+			<input id="id" name="id" th:field="*{id}"  type="hidden">
+			<div class="x-panel">
+			    <div class="x-panel-body">
+			    	<style>
+						th{border:1px solid #99BBE8;padding:5px;text-align: center;background-color: #d0def0;}
+						td{border:1px solid #99BBE8;padding:5px;}
+						tr{border:1px solid #99BBE8;padding:5px;}
+					</style>
+			        <!--startprint1-->
+			        <div class="title"><h3>票据信息</h3></div>
+			        <table id="fineTable">
+			            <tr>
+			                <td align="center" width="120px">标题</td>
+			                <td colspan="6">
+						       [[${bills.title}]]
+						    </td>
+			            </tr>
+			            <tr>
+			            	<td align="center">项目主键</td>
+			                <td colspan="6">
+						       [[${bills.projectId}]]
+						    </td>
+			            </tr>
+			            <tr>
+			                <td align="center">票据类型</td>
+			                <td colspan="6">
+						       [[${bills.typeName}]]
+						    </td>
+			            </tr>
+			            <tr>
+			                <td align="center">类型</td>
+			                <td colspan="6">
+						       [[${typeName}]]
+						    </td>
+			            </tr>
+			            <tr>
+			                <td align="center">编号</td>
+			                <td colspan="6">
+						       [[${bills.billNum}]]
+						    </td>
+			            </tr>
+			            <tr>
+			                <td align="center">票号</td>
+			                <td colspan="6">
+						       [[${bills.billNum2}]]
+						    </td>
+			            </tr>
+			            <tr>
+			                <td align="center">开据金额</td>
+			                <td colspan="6" id="amountId">
+						       [[${bills.amount}]]
+						    </td>
+			            </tr>
+			            <tr>
+			                <td align="center">开票单位</td>
+			                <td colspan="6">
+						       [[${bills.company}]]
+						    </td>
+			            </tr>
+			            <tr>
+			                <td align="center">取票人</td>
+			                <td colspan="6">
+						       [[${bills.receiver}]]
+						    </td>
+			            </tr>
+			            <tr>
+			                <td align="center">开据时间</td>
+			                <td colspan="6" id="createTimeId">
+						       [[${bills.createTime}]]
+						    </td>
+			            </tr>
+			            <tr>
+			                <td align="center">开票人</td>
+			                <td colspan="6">
+						       [[${bills.drawerName}]]
+						    </td>
+			            </tr>
+			            <tr>
+			                <td align="center">备注信息</td>
+			                <td colspan="6">
+						       [[${bills.remark}]]
+						    </td>
+			            </tr>
+			        </table>
+			        <!--endprint1-->
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="form-control-static" align="center">
+					<a href="javascript:" class="btn btn-default" id="btnPrint"><i class="glyphicon glyphicon-print"></i> 打 印</a>
+					<button onclick="$.modal.close()" class="btn btn-danger" type="button"><i class="fa fa-reply-all"></i> 关闭</button>
+				</div>
+			</div>
+		</form>
+    </div>
+    <div th:include="include::footer"></div>
+    <div th:fragment="footer">
+    	<script th:src="@{/ruoyi/js/scripts/print/jquery.PrintArea.js}"></script>
+    </div>
+    <script type="text/javascript">
+		var prefix = ctx + "module/bills";
+		$("#form-bills-view").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			},
+		});
+	</script>
+</body>
+</html>

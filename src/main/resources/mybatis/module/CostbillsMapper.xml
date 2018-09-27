@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.module.costbills.mapper.CostbillsMapper">
+    
+    <resultMap type="Costbills" id="CostbillsResult">
+        <result property="id"    column="id"    />
+        <result property="amount"    column="amount"    />
+        <result property="billNum"    column="bill_num"    />
+        <result property="company"    column="company"    />
+        <result property="fileIds"    column="fileIds"    />
+        <result property="lastTime"    column="lastTime"    />
+        <result property="pre1"    column="pre1"    />
+        <result property="pre2"    column="pre2"    />
+        <result property="pre3"    column="pre3"    />
+        <result property="pre4"    column="pre4"    />
+        <result property="pre5"    column="pre5"    />
+        <result property="pre6"    column="pre6"    />
+        <result property="rate"    column="rate"    />
+        <result property="receiver"    column="receiver"    />
+        <result property="tax"    column="tax"    />
+        <result property="title"    column="title"    />
+        <result property="total"    column="total"    />
+        <result property="type"    column="type"    />
+        <result property="typeId"    column="type_id"    />
+        <result property="creatorId"    column="creator_id"    />
+        <result property="extId"    column="ext_id"    />
+        <result property="subId"    column="sub_id"    />
+        <result property="supplierId"    column="supplier_id"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+	
+	<sql id="selectCostbillsVo">
+        select id, amount, bill_num, company, fileIds, lastTime, pre1, pre2, pre3, pre4, pre5, pre6, rate, receiver, tax, title, total, type, type_id, creator_id, ext_id, sub_id, supplier_id, status, create_by, create_time, update_by, update_time, remark from costbills
+    </sql>
+	
+    <select id="selectCostbillsList" parameterType="Costbills" resultMap="CostbillsResult">
+        <include refid="selectCostbillsVo"/>
+        <where>  
+            <if test="id != null and id != ''"> and id = #{id}</if>
+             <if test="amount != null and amount != ''"> and amount = #{amount}</if>
+             <if test="billNum != null and billNum != ''"> and bill_num = #{billNum}</if>
+             <if test="company != null and company != ''"> and company = #{company}</if>
+             <if test="fileIds != null and fileIds != ''"> and fileIds = #{fileIds}</if>
+             <if test="lastTime != null and lastTime != ''"> and lastTime = #{lastTime}</if>
+             <if test="pre1 != null and pre1 != ''"> and pre1 = #{pre1}</if>
+             <if test="pre2 != null and pre2 != ''"> and pre2 = #{pre2}</if>
+             <if test="pre3 != null and pre3 != ''"> and pre3 = #{pre3}</if>
+             <if test="pre4 != null and pre4 != ''"> and pre4 = #{pre4}</if>
+             <if test="pre5 != null and pre5 != ''"> and pre5 = #{pre5}</if>
+             <if test="pre6 != null and pre6 != ''"> and pre6 = #{pre6}</if>
+             <if test="rate != null and rate != ''"> and rate = #{rate}</if>
+             <if test="receiver != null and receiver != ''"> and receiver = #{receiver}</if>
+             <if test="tax != null and tax != ''"> and tax = #{tax}</if>
+             <if test="title != null and title != ''"> and title = #{title}</if>
+             <if test="total != null and total != ''"> and total = #{total}</if>
+             <if test="type != null and type != ''"> and type = #{type}</if>
+             <if test="typeId != null and typeId != ''"> and type_id = #{typeId}</if>
+             <if test="creatorId != null and creatorId != ''"> and creator_id = #{creatorId}</if>
+             <if test="extId != null and extId != ''"> and ext_id = #{extId}</if>
+             <if test="subId != null and subId != ''"> and sub_id = #{subId}</if>
+             <if test="supplierId != null and supplierId != ''"> and supplier_id = #{supplierId}</if>
+             <if test="status != null and status != ''"> and status = #{status}</if>
+             <if test="createBy != null and createBy != ''"> and create_by = #{createBy}</if>
+             
+             <!-- <if test="createTime != null"> and create_time = #{createTime}</if> -->
+             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+				AND date_format(create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+			 </if>
+			 <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+				AND date_format(create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+			 </if>
+			 
+             <if test="updateBy != null and updateBy != ''"> and update_by = #{updateBy}</if>
+             <if test="updateTime != null"> and update_time = #{updateTime}</if>
+             <if test="remark != null and remark != ''"> and remark = #{remark}</if>
+         </where>
+    </select>
+    
+    <select id="selectCostbillsById" parameterType="Integer" resultMap="CostbillsResult">
+        <include refid="selectCostbillsVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertCostbills" parameterType="Costbills">
+        insert into costbills
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != '' ">id,</if>
+			<if test="amount != null and amount != '' ">amount,</if>
+			<if test="billNum != null and billNum != '' ">bill_num,</if>
+			<if test="company != null and company != '' ">company,</if>
+			<if test="fileIds != null and fileIds != '' ">fileIds,</if>
+			<if test="lastTime != null and lastTime != '' ">lastTime,</if>
+			<if test="pre1 != null and pre1 != '' ">pre1,</if>
+			<if test="pre2 != null and pre2 != '' ">pre2,</if>
+			<if test="pre3 != null and pre3 != '' ">pre3,</if>
+			<if test="pre4 != null and pre4 != '' ">pre4,</if>
+			<if test="pre5 != null and pre5 != '' ">pre5,</if>
+			<if test="pre6 != null and pre6 != '' ">pre6,</if>
+			<if test="rate != null and rate != '' ">rate,</if>
+			<if test="receiver != null and receiver != '' ">receiver,</if>
+			<if test="tax != null and tax != '' ">tax,</if>
+			<if test="title != null and title != '' ">title,</if>
+			<if test="total != null and total != '' ">total,</if>
+			<if test="type != null and type != '' ">type,</if>
+			<if test="typeId != null and typeId != '' ">type_id,</if>
+			<if test="creatorId != null and creatorId != '' ">creator_id,</if>
+			<if test="extId != null and extId != '' ">ext_id,</if>
+			<if test="subId != null and subId != '' ">sub_id,</if>
+			<if test="supplierId != null and supplierId != '' ">supplier_id,</if>
+			<if test="status != null and status != '' ">status,</if>
+			<if test="createBy != null and createBy != '' ">create_by,</if>
+			<if test="createTime != null">create_time,</if>
+			<if test="updateBy != null and updateBy != '' ">update_by,</if>
+			<if test="updateTime != null">update_time,</if>
+			<if test="remark != null and remark != '' ">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != ''">#{id},</if>
+			<if test="amount != null and amount != ''">#{amount},</if>
+			<if test="billNum != null and billNum != ''">#{billNum},</if>
+			<if test="company != null and company != ''">#{company},</if>
+			<if test="fileIds != null and fileIds != ''">#{fileIds},</if>
+			<if test="lastTime != null and lastTime != ''">#{lastTime},</if>
+			<if test="pre1 != null and pre1 != ''">#{pre1},</if>
+			<if test="pre2 != null and pre2 != ''">#{pre2},</if>
+			<if test="pre3 != null and pre3 != ''">#{pre3},</if>
+			<if test="pre4 != null and pre4 != ''">#{pre4},</if>
+			<if test="pre5 != null and pre5 != ''">#{pre5},</if>
+			<if test="pre6 != null and pre6 != ''">#{pre6},</if>
+			<if test="rate != null and rate != ''">#{rate},</if>
+			<if test="receiver != null and receiver != ''">#{receiver},</if>
+			<if test="tax != null and tax != ''">#{tax},</if>
+			<if test="title != null and title != ''">#{title},</if>
+			<if test="total != null and total != ''">#{total},</if>
+			<if test="type != null and type != ''">#{type},</if>
+			<if test="typeId != null and typeId != ''">#{typeId},</if>
+			<if test="creatorId != null and creatorId != ''">#{creatorId},</if>
+			<if test="extId != null and extId != ''">#{extId},</if>
+			<if test="subId != null and subId != ''">#{subId},</if>
+			<if test="supplierId != null and supplierId != ''">#{supplierId},</if>
+			<if test="status != null and status != ''">#{status},</if>
+			<if test="createBy != null and createBy != ''">#{createBy},</if>
+			<if test="createTime != null">#{createTime},</if>
+			<if test="updateBy != null and updateBy != ''">#{updateBy},</if>
+			<if test="updateTime != null">#{updateTime},</if>
+			<if test="remark != null and remark != ''">#{remark},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateCostbills" parameterType="Costbills">
+        update costbills
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="amount != null  ">amount = #{amount},</if>
+            <if test="billNum != null  and billNum != ''  ">bill_num = #{billNum},</if>
+            <if test="company != null  and company != ''  ">company = #{company},</if>
+            <if test="fileIds != null  and fileIds != ''  ">fileIds = #{fileIds},</if>
+            <if test="lastTime != null  ">lastTime = #{lastTime},</if>
+            <if test="pre1 != null  ">pre1 = #{pre1},</if>
+            <if test="pre2 != null  ">pre2 = #{pre2},</if>
+            <if test="pre3 != null  ">pre3 = #{pre3},</if>
+            <if test="pre4 != null  ">pre4 = #{pre4},</if>
+            <if test="pre5 != null  ">pre5 = #{pre5},</if>
+            <if test="pre6 != null  ">pre6 = #{pre6},</if>
+            <if test="rate != null  ">rate = #{rate},</if>
+            <if test="receiver != null  and receiver != ''  ">receiver = #{receiver},</if>
+            <if test="tax != null  ">tax = #{tax},</if>
+            <if test="title != null  and title != ''  ">title = #{title},</if>
+            <if test="total != null  ">total = #{total},</if>
+            <if test="type != null  and type != ''  ">type = #{type},</if>
+            <if test="typeId != null  ">type_id = #{typeId},</if>
+            <if test="creatorId != null  ">creator_id = #{creatorId},</if>
+            <if test="extId != null  ">ext_id = #{extId},</if>
+            <if test="subId != null  ">sub_id = #{subId},</if>
+            <if test="supplierId != null  ">supplier_id = #{supplierId},</if>
+            <if test="status != null  and status != ''  ">status = #{status},</if>
+            <if test="createBy != null  and createBy != ''  ">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != '' ">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="remark != null  and remark != '' ">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteCostbillsById" parameterType="Integer">
+        delete from costbills where id = #{id}
+    </delete>
+	
+    <delete id="deleteCostbillsByIds" parameterType="String">
+        delete from costbills where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -1,0 +1,186 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+    <div class="container-div">
+		<div class="btn-group hidden-xs" id="toolbar" role="group">
+			<a class="btn btn-outline btn-success btn-rounded" onclick="$.operate.addFull()" shiro:hasPermission="module:borrows:add">
+				<i class="fa fa-plus"></i> 新增
+			</a>
+			<a class="btn btn-outline btn-danger btn-rounded" onclick="$.operate.removeAll()" shiro:hasPermission="module:borrows:remove">
+				<i class="fa fa-trash-o"></i> 删除
+			</a>
+		</div>
+			
+		<div class="col-sm-12 select-table table-striped">
+			<table id="bootstrap-table" data-mobile-responsive="true"></table>
+		</div>
+    </div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('module:borrows:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('module:borrows:remove')}]];
+        var prefix = ctx + "module/borrows"
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                modalName: "借款",
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'id', 
+					halign : 'center',
+					align: 'center',
+					title : '借款ID' 
+				},
+				{
+					field : 'borrowNum', 
+					halign : 'center',
+					align: 'center',
+					title : '借款单号' 
+				},
+				{
+					field : 'projectId', 
+					halign : 'center',
+					title : '项目' 
+				},
+				{
+					field : 'purpose', 
+					halign : 'center',
+					title : '用途' 
+				},
+				{
+					field : 'amount', 
+					halign : 'center',
+					align: 'right',
+					title : '借款金额',
+					formatter: function(value, row, index){
+						return "￥" + formatMoney(value,2);
+					}
+				},
+				{
+					field : 'residualAmount', 
+					halign : 'center',
+					align: 'right',
+					title : '应还金额',
+					formatter: function(value, row, index){
+						return "￥" + formatMoney(value,2);
+					}
+				},
+				{
+					field : 'borrowerName', 
+					halign : 'center',
+					align: 'center',
+					title : '借款人' 
+				},
+				{
+					field : 'createDate', 
+					halign : 'center',
+					align: 'center',
+					title : '借款日期',
+					formatter: function(value, row, index) {
+						if(value != null){
+							return value.substring(0,10);
+						}else{
+							return "";
+						}
+						
+					} 
+				},
+				{
+					field : 'repayDate', 
+					halign : 'center',
+					align: 'center',
+					title : '还款日期',
+					formatter: function(value, row, index) {
+						if(value != null){
+							return value.substring(0,10);
+						}else{
+							return "";
+						}
+					} 
+				},
+				{
+					field : 'audStatus', 
+					halign : 'center',
+					align: 'center',
+					title : '审核状态',
+					formatter: function(value, row, index) {
+						if(value == "0"){
+							return "未提交";
+						}else if(value == "1"){
+							return "审批中";
+						}else if(value == "2"){
+							return "未通过";
+						}else if(value == "3"){
+							return "已通过";
+						}else if(value == "4"){
+							return "财务通知";
+						}else{
+							return "";
+						}
+					} 
+				},
+				{
+					field : 'payStatus', 
+					halign : 'center',
+					align: 'center',
+					title : '借款状态 ',
+					formatter: function(value, row, index) {
+						if(value == "0"){
+							return "未放款";
+						}else if(value == "1"){
+							return "已放款";
+						}else if(value == "2"){
+							return "可放款";
+						}else{
+							return "其他";
+						}
+					} 
+				},
+				{
+					field : 'repayStatus', 
+					halign : 'center',
+					align: 'center',
+					title : '还款状态 ',
+					formatter: function(value, row, index) {
+						if(value == "1"){
+							return "已还款";
+						}else if(value == "2"){
+							return "报销冲抵";
+						}else if(value == "3"){
+							return "付款冲抵";
+						}else{
+							return "未还款";
+						}
+					}  
+				},
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		            	var actions = [];
+		            	actions.push('<a class="btn btn-warning btn-xs ' + editFlag + '" href="#" onclick="view(\'' + row.id + '\')"><i class="fa fa-search"></i>详细</a> ');
+		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.editFull(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+						return actions.join('');
+		            }
+		        }]
+            };
+            $.table.init(options);
+        });
+        
+        /*操作-详细*/
+		function view(id) {
+		    var url = prefix + '/view/' + id;
+		    $.modal.openFull("借款详细", url);
+		}
+    </script>
+</body>
+</html>

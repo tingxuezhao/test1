@@ -1,0 +1,165 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+    <div class="container-div ui-layout-center">
+    	<div class="col-sm-12 select-info">
+			<form id="bills-form">
+				<input type="hidden" id="id" name="id">
+				<div class="select-list">
+					<ul>
+						<li>
+							票据类型：<select name="typeId" th:with="type=${billTypesList}">
+		                    	<option></option>
+			                    <option th:each="dict : ${type}" th:text="${dict.name}" th:value="${dict.id}"></option>
+			                </select>
+						</li>
+						<li>
+							票据编号：<input type="text" name="billNum"/>
+						</li>
+						<li>
+							开票单位：<input type="text" name="company"/>
+						</li>
+						<li>
+							取票人：<input type="text" name="receiver"/>
+						</li>
+						<li>
+							题&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;目：<input type="text" name="title"/>
+						</li>
+						<li>
+							所属项目：<input type="text" name="projectId"/>
+						</li>
+						<li class="select-time">
+							<label>创建时间： </label>
+							<input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
+							<span>-</span>
+							<input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
+						</li>
+						<li>
+							<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+							<a class="btn btn-success btn-rounded btn-sm" onclick="$.table.exportExcel()" shiro:hasPermission="system:user:export"><i class="fa fa-download"></i>&nbsp;导出</a>
+						</li>
+					</ul>
+				</div>
+			</form>
+		</div>
+		<div class="btn-group hidden-xs" id="toolbar" role="group">
+			<a class="btn btn-outline btn-success btn-rounded" onclick="$.operate.addFull()" shiro:hasPermission="module:bills:add">
+				<i class="fa fa-plus"></i> 新增
+			</a>
+			<a class="btn btn-outline btn-danger btn-rounded" onclick="$.operate.removeAll()" shiro:hasPermission="module:bills:remove">
+				<i class="fa fa-trash-o"></i> 删除
+			</a>
+		</div>
+			
+		<div class="col-sm-12 select-table table-striped">
+			<table id="bootstrap-table" data-mobile-responsive="true"></table>
+		</div>
+    </div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('module:bills:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('module:bills:remove')}]];
+        var prefix = ctx + "module/bills"
+
+        $(function() {
+            var options = {
+                url: prefix + "/listUnc",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                modalName: "票据",
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'id', 
+					halign : 'center',
+					align: 'center',
+					title : '票据ID' 
+				},
+				{
+					field : 'billNum', 
+					halign : 'center',
+					align: 'center',
+					title : '票据编号' 
+				},
+				{
+					field : 'projectId', 
+					halign : 'center',
+					title : '所属项目/题目' 
+				},
+				{
+					field : 'typeId', 
+					halign : 'center',
+					align: 'center',
+					title : '票据类型',
+					formatter: function(value, row, index) {
+						var billType = [[${billTypesList}]];
+						for(var n=0; n<billType.length; n++){
+							if(billType[n].id == value){
+								return billType[n].name;
+							}
+						}
+						return "";
+					} 
+				},
+				{
+					field : 'createTime', 
+					halign : 'center',
+					align: 'center',
+					title : '开票时间',
+					formatter: function(value, row, index) {
+						if(value != null){
+							return value.substring(0,10);
+						}else{
+							return "";
+						}
+					}
+				},
+				{
+					field : 'amount', 
+					halign : 'center',
+					align: 'right',
+					title : '金额',
+					formatter: function(value, row, index){
+						return "￥" + formatMoney(value,2);
+					}
+				},
+				{
+					field : 'drawerName', 
+					halign : 'center',
+					align: 'center',
+					title : '开票人' 
+				},
+				{
+					field : 'receiver', 
+					halign : 'center',
+					align: 'center',
+					title : '取票人' 
+				},
+		        {
+		            title: '操作',
+		            halign : 'center',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		            	var actions = [];
+		            	actions.push('<a class="btn btn-warning btn-xs ' + editFlag + '" href="#" onclick="view(\'' + row.id + '\')"><i class="fa fa-search"></i>详细</a> ');
+		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.editFull(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+						return actions.join('');
+		            }
+		        }]
+            };
+            $.table.init(options);
+        });
+        
+        /*操作-详细*/
+		function view(id) {
+		    var url = prefix + '/view/' + id;
+		    $.modal.openFull("票据详细", url);
+		}
+    </script>
+</body>
+</html>

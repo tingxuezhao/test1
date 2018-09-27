@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.module.payCategorys.mapper.PayCategorysMapper">
+    
+    <resultMap type="PayCategorys" id="PayCategorysResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+	
+	<sql id="selectPayCategorysVo">
+        select id, name, remark from pay_categorys
+    </sql>
+	
+    <select id="selectPayCategorysList" parameterType="PayCategorys" resultMap="PayCategorysResult">
+        <include refid="selectPayCategorysVo"/>
+        <where>  
+            <if test="id != null and id != ''"> and id = #{id}</if>
+             <if test="name != null and name != ''"> and name = #{name}</if>
+             <if test="remark != null and remark != ''"> and remark = #{remark}</if>
+         </where>
+    </select>
+    
+    <select id="selectPayCategorysById" parameterType="Integer" resultMap="PayCategorysResult">
+        <include refid="selectPayCategorysVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertPayCategorys" parameterType="PayCategorys">
+        insert into pay_categorys
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != '' ">id,</if>
+			<if test="name != null and name != '' ">name,</if>
+			<if test="remark != null and remark != '' ">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != ''">#{id},</if>
+			<if test="name != null and name != ''">#{name},</if>
+			<if test="remark != null and remark != ''">#{remark},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updatePayCategorys" parameterType="PayCategorys">
+        update pay_categorys
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null  and name != ''  ">name = #{name},</if>
+            <if test="remark != null  and remark != ''  ">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deletePayCategorysById" parameterType="Integer">
+        delete from pay_categorys where id = #{id}
+    </delete>
+	
+    <delete id="deletePayCategorysByIds" parameterType="String">
+        delete from pay_categorys where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.module.itemType.mapper.ItemTypeMapper">
+    
+    <resultMap type="ItemType" id="ItemTypeResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="typeOrder"    column="type_order"    />
+        <result property="subcompanyId"    column="subCompany_id"    />
+        <result property="status"    column="status"    />
+        <result property="workloadMark"    column="workload_mark"    />
+    </resultMap>
+	
+	<sql id="selectItemTypeVo">
+        select id, name, type_order, subCompany_id, status, workload_mark from item_type
+    </sql>
+	
+    <select id="selectItemTypeList" parameterType="ItemType" resultMap="ItemTypeResult">
+        <include refid="selectItemTypeVo"/>
+        <where>  
+            <if test="id != null and id != ''"> and id = #{id}</if>
+             <if test="name != null and name != ''"> and name = #{name}</if>
+             <if test="typeOrder != null and typeOrder != ''"> and type_order = #{typeOrder}</if>
+             <if test="subcompanyId != null and subcompanyId != ''"> and subCompany_id = #{subcompanyId}</if>
+             <if test="status != null and status != ''"> and status = #{status}</if>
+             <if test="workloadMark != null and workloadMark != ''"> and workload_mark = #{workloadMark}</if>
+         </where>
+    </select>
+    
+    <select id="selectItemTypeById" parameterType="Integer" resultMap="ItemTypeResult">
+        <include refid="selectItemTypeVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertItemType" parameterType="ItemType">
+        insert into item_type
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != '' ">id,</if>
+			<if test="name != null and name != '' ">name,</if>
+			<if test="typeOrder != null and typeOrder != '' ">type_order,</if>
+			<if test="subcompanyId != null and subcompanyId != '' ">subCompany_id,</if>
+			<if test="status != null and status != '' ">status,</if>
+			<if test="workloadMark != null and workloadMark != '' ">workload_mark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != ''">#{id},</if>
+			<if test="name != null and name != ''">#{name},</if>
+			<if test="typeOrder != null and typeOrder != ''">#{typeOrder},</if>
+			<if test="subcompanyId != null and subcompanyId != ''">#{subcompanyId},</if>
+			<if test="status != null and status != ''">#{status},</if>
+			<if test="workloadMark != null and workloadMark != ''">#{workloadMark},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateItemType" parameterType="ItemType">
+        update item_type
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null  and name != ''  ">name = #{name},</if>
+            <if test="typeOrder != null  ">type_order = #{typeOrder},</if>
+            <if test="subcompanyId != null  ">subCompany_id = #{subcompanyId},</if>
+            <if test="status != null  and status != ''  ">status = #{status},</if>
+            <if test="workloadMark != null  and workloadMark != ''  ">workload_mark = #{workloadMark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteItemTypeById" parameterType="Integer">
+        delete from item_type where id = #{id}
+    </delete>
+	
+    <delete id="deleteItemTypeByIds" parameterType="String">
+        delete from item_type where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

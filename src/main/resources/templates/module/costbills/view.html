@@ -1,0 +1,169 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+	<div th:fragment="header">
+		<link th:href="@{/ruoyi/css/view.table.css}" rel="stylesheet"/>
+	</div>
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-costbills-edit" th:object="${costbills}">
+            <input id="id" name="id" th:field="*{id}"  type="hidden">
+            <div class="x-panel">
+			    <div class="x-panel-body">
+			    	<style>
+						th{border:1px solid #99BBE8;padding:5px;text-align: center;background-color: #d0def0;}
+						td{border:1px solid #99BBE8;padding:5px;}
+						tr{border:1px solid #99BBE8;padding:5px;}
+					</style>
+			        <!--startprint1-->
+			        <div class="title"><h3>票据信息</h3></div>
+			        <table id="fineTable">
+			            <tr>
+			                <td align="center" width="200px">应税劳务</td>
+			                <td colspan="6">
+						       	[[${costbills.title}]]
+						    </td>
+			            </tr>
+			            <tr>
+			            	<td align="center">所属项目</td>
+			                <td colspan="6">
+						    	项目code
+						    </td>
+			            </tr>
+			            <tr>
+			                <td align="center">票据类型</td>
+			                <td colspan="6">
+						    	[[${costbills.costTypeName}]]
+						    </td>
+			            </tr>
+			            <tr>
+			                <td align="center">发票类型</td>
+			                <td colspan="6">
+						    	[[${costbills.typeName}]]
+						    </td>
+			            </tr>
+			            <tr>
+			                <td align="center">发票号码</td>
+			                <td colspan="6">
+						    	[[${costbills.billNum}]]
+						    </td>
+			            </tr>
+			            <tr>
+			                <td align="center">开票单位</td>
+			                <td colspan="6">
+						       	[[${costbills.company}]]
+						    </td>
+			            </tr>
+			            <tr>
+			                <td align="center">开具时间</td>
+			                <td colspan="6" id="createTimeId">
+						       
+						    </td>
+			            </tr>
+			            <tr>
+			                <td align="center">提供发票</td>
+			                <td colspan="6">
+						       	[[${costbills.proBill}]]
+						    </td>
+			            </tr>
+			            <tr>
+			                <td align="center">开票金额</td>
+			                <td colspan="6" id="totalId">
+						       	[[${costbills.total}]]
+						    </td>
+			            </tr>
+			            <tr>
+			                <td align="center">金额</td>
+			                <td colspan="6" id="amountId">
+						       	[[${costbills.amount}]]
+						    </td>
+			            </tr>
+			            <tr>
+			                <td align="center">税率</td>
+			                <td colspan="6">
+						       	[[${costbills.rateName}]]
+						    </td>
+			            </tr>
+			            <tr>
+			                <td align="center">税额</td>
+			                <td colspan="6" id="taxId">
+						       	[[${costbills.tax}]]
+						    </td>
+			            </tr>
+			            <tr>
+			                <td align="center">预缴增值税</td>
+			                <td colspan="6" id="pre1Id">
+						       	[[${costbills.pre1}]]
+						    </td>
+			            </tr>
+			            <tr>
+			                <td align="center">预缴城建税</td>
+			                <td colspan="6" id="pre2Id">
+						       	[[${costbills.pre2}]]
+						    </td>
+			            </tr>
+			            <tr>
+			                <td align="center">预缴地方教育费附加</td>
+			                <td colspan="6" id="pre3Id">
+						       	[[${costbills.pre3}]]
+						    </td>
+			            </tr>
+			            <tr>
+			                <td align="center">预缴教育费附加</td>
+			                <td colspan="6" id="pre4Id">
+						       	[[${costbills.pre4}]]
+						    </td>
+			            </tr>
+			            <tr>
+			                <td align="center">预缴所得税</td>
+			                <td colspan="6" id="pre5Id">
+						       	[[${costbills.pre5}]]
+						    </td>
+			            </tr>
+			            <tr>
+			                <td align="center">预缴印花税</td>
+			                <td colspan="6" id="pre6Id">
+						       	[[${costbills.pre6}]]
+						    </td>
+			            </tr>
+			        </table>
+			        <!--endprint1-->
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="form-control-static" align="center">
+					<a href="javascript:" class="btn btn-default" id="btnPrint"><i class="glyphicon glyphicon-print"></i> 打 印</a>
+					<button onclick="$.modal.close()" class="btn btn-danger" type="button">关闭</button>
+				</div>
+			</div>
+		</form>
+    </div>
+    <div th:include="include::footer"></div>
+    <div th:fragment="footer">
+    	<script th:src="@{/ruoyi/js/scripts/print/jquery.PrintArea.js}"></script>
+    </div>
+    <script type="text/javascript">
+		var prefix = ctx + "module/costbills";
+		$("#form-costbills-edit").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			},
+			submitHandler: function(form) {
+				$.operate.save(prefix + "/edit", $('#form-costbills-edit').serialize());
+			}
+		});
+	</script>
+	<script th:inline="javascript">
+		$(function(){
+			var str = [[${costbills.createTime}]];
+			if(str != ""){
+				var date = GMTToDateStr(str);
+				$("#createTimeId").html(date);
+			}
+		});
+	</script>
+</body>
+</html>

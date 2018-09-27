@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.module.billTypes.mapper.BillTypesMapper">
+    
+    <resultMap type="BillTypes" id="BillTypesResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="descn"    column="descn"    />
+    </resultMap>
+	
+	<sql id="selectBillTypesVo">
+        select id, name, descn from bill_types
+    </sql>
+	
+    <select id="selectBillTypesList" parameterType="BillTypes" resultMap="BillTypesResult">
+        <include refid="selectBillTypesVo"/>
+        <where>  
+            <if test="id != null and id != ''"> and id = #{id}</if>
+             <if test="name != null and name != ''"> and name = #{name}</if>
+             <if test="descn != null and descn != ''"> and descn = #{descn}</if>
+         </where>
+    </select>
+    
+    <select id="selectBillTypesById" parameterType="Integer" resultMap="BillTypesResult">
+        <include refid="selectBillTypesVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBillTypes" parameterType="BillTypes">
+        insert into bill_types
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != '' ">id,</if>
+			<if test="name != null and name != '' ">name,</if>
+			<if test="descn != null and descn != '' ">descn,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != ''">#{id},</if>
+			<if test="name != null and name != ''">#{name},</if>
+			<if test="descn != null and descn != ''">#{descn},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateBillTypes" parameterType="BillTypes">
+        update bill_types
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null  and name != ''  ">name = #{name},</if>
+            <if test="descn != null  and descn != ''  ">descn = #{descn},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteBillTypesById" parameterType="Integer">
+        delete from bill_types where id = #{id}
+    </delete>
+	
+    <delete id="deleteBillTypesByIds" parameterType="String">
+        delete from bill_types where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
